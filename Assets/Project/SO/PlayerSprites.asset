@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986a77613d93add4fab384da1b55ac16, type: 3}
+  m_Name: PlayerSprites
+  m_EditorClassIdentifier: 
+  _sprites:
+  - Sprite: {fileID: 21300000, guid: 306d730553ed40648b1467ef37c2a96b, type: 3}
+    IsBuy: 1
+  - Sprite: {fileID: 21300000, guid: 98bc1796ef17b7d478b76fabe4683c66, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: c3aadb6ad656b07499abf06e35e5981f, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: e9857268351a51e48a8cf9828f003cf2, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: ca91224426a94fb44ad6ea55c8c68f77, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: 79b86c036cda25445a9d54fb02ad4372, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: 5a6ce671440004544acb348e6299a64b, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: db6c66d7f301bee4fb8260f8c4ebd494, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: 047be5ab30d4bb04e9058438184fd5cc, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: 1783c00da635d0e47a7dc5d39cfb8b4e, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: ef750bdbe01eefa47ab2f5d27f4fed6f, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: 0a6b892dc1f1343419d41ee9aa2fbf9c, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: 70ab62fc541a42c4f8934a08520c4b88, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: 5628c63c10edbd4409f19d25a25d38f8, type: 3}
+    IsBuy: 0
+  - Sprite: {fileID: 21300000, guid: b3d0e82cf5ef28b4cafd5481354ddf5a, type: 3}
+    IsBuy: 0
+  _activeSprite: {fileID: 21300000, guid: 306d730553ed40648b1467ef37c2a96b, type: 3}
