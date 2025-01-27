@@ -12,6 +12,11 @@ namespace Project._Screepts.Screns
             Dialog.ShowShopScreen();
         }
 
+        public void ShowGameScreen()
+        {
+            Dialog.ShowGameScreen();
+        }
+
         public void ShowRecordScreen()
         {
             Dialog.ShowRecordScreen();

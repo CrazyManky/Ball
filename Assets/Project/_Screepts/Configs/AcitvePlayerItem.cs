@@ -18,12 +18,19 @@ namespace Project._Screepts.Configs
         public Sprite GetActiveSprite()
         {
             var itemIndex = PlayerPrefs.GetInt("ActiveItem", 0);
-            return _sprites[itemIndex].Sprite;
+            _activeSprite = _sprites[itemIndex].Sprite;
+            return _activeSprite;
         }
 
         public void PurcheisItem(int itemIndex)
         {
             _sprites[itemIndex].BuyItem();
+            _activeSprite = _sprites[itemIndex].Sprite;
+        }
+
+        public List<ShopItem> GetItems()
+        {
+            return _sprites;
         }
     }
 

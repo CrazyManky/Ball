@@ -1,32 +1,45 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Project._Screepts.GamePlayScreepts
 {
     public class BallController : MonoBehaviour
     {
+        [SerializeField] private SpriteRenderer _spriteRenderer;
+
         private Rigidbody2D _rigidbody;
         private LineRenderer _lineRenderer;
         private Vector2 _startPoint;
-        private Vector2 _dragPoint;
         private bool _isDragging;
-        private float _maxForce = 1000f; // Увеличенная максимальная сила
-        private int _arcSegments = 50; // Увеличено количество сегментов траектории
+        private Vector2 _initialTouchPos;
+        private bool _isLaunched;
+
+        public float forceMultiplier = 10f; // Сила для основного движения
+        public float maxDragDistance = 5f; // Максимальное расстояние перетаскивания
+        public float deviationForce = 2f; // Сила отклонения
+        public int trajectorySegments = 100; // Количество точек для траектории
+
+        private Vector2 deviationDirection; // Направление отклоняющей силы
 
         void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             _lineRenderer = GetComponent<LineRenderer>();
-            _lineRenderer.positionCount = _arcSegments;
-            _rigidbody.isKinematic = true;
+
+            _lineRenderer.positionCount = 0; // Изначально линии нет
+            _rigidbody.gravityScale = 0; // Отключаем гравитацию до запуска
+            _isLaunched = false; // Мяч не запущен
         }
 
+        public void SetSprite(Sprite sprite)
+        {
+            _spriteRenderer.sprite = sprite;
+        }
+        
         void Update()
         {
-            if (_isDragging)
-            {
-                _dragPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                DrawTrajectory(_startPoint, _dragPoint);
-            }
+            // Блокируем ввод, если мяч уже был запущен
+            if (_isLaunched) return;
 
             if (Input.touchCount > 0)
             {
@@ -38,30 +51,39 @@ namespace Project._Screepts.GamePlayScreepts
                     case TouchPhase.Began:
                         if (IsTouchingObject(touchPos))
                         {
-                            _startPoint = touchPos;
                             _isDragging = true;
+                            _initialTouchPos = touchPos;
+                            _startPoint = transform.position;
                         }
 
                         break;
+
                     case TouchPhase.Moved:
                         if (_isDragging)
                         {
-                            _dragPoint = touchPos;
-                            DrawTrajectory(_startPoint, _dragPoint);
+                            DrawTrajectory(_startPoint, touchPos); // Обновляем траекторию
                         }
 
                         break;
+
                     case TouchPhase.Ended:
                         if (_isDragging)
                         {
-                            Vector2 releasePoint = touchPos;
-                            Vector2 force = CalculateForce(_startPoint, releasePoint);
-                            _rigidbody.isKinematic = false;
-                            _rigidbody.velocity = Vector2.zero; // Сброс скорости
-                            _rigidbody.angularVelocity = 0f; // Сброс угловой скорости
-                            _rigidbody.AddForce(force, ForceMode2D.Impulse);
                             _isDragging = false;
+
+                            // Скрываем траекторию
                             _lineRenderer.positionCount = 0;
+
+                            // Вычисляем направление силы
+                            Vector2 releaseDirection = _initialTouchPos - touchPos;
+
+                            // Ограничиваем максимальное расстояние
+                            if (releaseDirection.magnitude > maxDragDistance)
+                            {
+                                releaseDirection = releaseDirection.normalized * maxDragDistance;
+                            }
+
+                            LaunchBall(releaseDirection);
                         }
 
                         break;
@@ -75,31 +97,75 @@ namespace Project._Screepts.GamePlayScreepts
             return col != null && col.gameObject == gameObject;
         }
 
-        private void DrawTrajectory(Vector2 startPoint, Vector2 dragPoint)
+        private void LaunchBall(Vector2 releaseDirection)
         {
-            Vector3[] arcPoints = new Vector3[_arcSegments];
-            Vector2 direction = dragPoint - startPoint;
-            float distance = direction.magnitude;
-            Vector2 velocity = CalculateForce(startPoint, dragPoint) / _rigidbody.mass;
-            float timeStep = 0.05f; // Меньший шаг времени для более длинной траектории
+            // Устанавливаем флаг, чтобы запретить повторный запуск
+            _isLaunched = true;
 
-            for (int i = 0; i < _arcSegments; i++)
-            {
-                float t = i * timeStep;
-                float x = velocity.x * t;
-                float y = velocity.y * t + 0.5f * Physics2D.gravity.y * t * t;
-                arcPoints[i] = new Vector3(startPoint.x + x, startPoint.y + y, 0);
-            }
+            // Включаем гравитацию
+            _rigidbody.gravityScale = 1;
 
-            _lineRenderer.positionCount = _arcSegments;
-            _lineRenderer.SetPositions(arcPoints);
+            // Сбрасываем текущую скорость мяча
+            _rigidbody.velocity = Vector2.zero;
+
+            // Применяем основную силу для запуска мяча
+            Vector2 mainForce = releaseDirection * forceMultiplier;
+            _rigidbody.AddForce(mainForce, ForceMode2D.Impulse);
+
+            // Запускаем дугообразное движение с отклонением
+            StartCoroutine(ApplyDeviationForce(releaseDirection));
         }
 
-        private Vector2 CalculateForce(Vector2 startPoint, Vector2 endPoint)
+        private System.Collections.IEnumerator ApplyDeviationForce(Vector2 releaseDirection)
         {
-            Vector2 forceDirection = startPoint - endPoint;
-            float forceMagnitude = forceDirection.magnitude * 100; // Увеличена сила для быстрого движения
-            return Vector2.ClampMagnitude(forceDirection.normalized * forceMagnitude, _maxForce);
+            while (true) // Сила действует постоянно
+            {
+                // Вектор отклонения будет зависеть от направления перемещения пальца
+                Vector2 deviation = new Vector2(-releaseDirection.y, releaseDirection.x).normalized;
+
+                _rigidbody.AddForce(deviation * deviationForce, ForceMode2D.Force);
+                yield return new WaitForFixedUpdate();
+            }
+        }
+
+        private void DrawTrajectory(Vector2 startPoint, Vector2 releasePoint)
+        {
+            // Рассчитываем направление силы
+            Vector2 direction = _initialTouchPos - releasePoint;
+
+            // Ограничиваем максимальное расстояние
+            if (direction.magnitude > maxDragDistance)
+            {
+                direction = direction.normalized * maxDragDistance;
+            }
+
+            Vector2 force = direction * forceMultiplier;
+
+            // Массив точек траектории
+            Vector3[] trajectoryPoints = new Vector3[trajectorySegments];
+            Vector2 currentPosition = startPoint;
+            Vector2 currentVelocity = force / _rigidbody.mass;
+            float timeStep = Time.fixedDeltaTime;
+
+            // Симуляция траектории
+            for (int i = 0; i < trajectorySegments; i++)
+            {
+                trajectoryPoints[i] = currentPosition;
+
+                // Вычисляем новое положение
+                currentPosition += currentVelocity * timeStep;
+
+                // Учитываем гравитацию
+                currentVelocity += Physics2D.gravity * timeStep;
+
+                // Учтем отклоняющую силу
+                Vector2 deviationDirection = new Vector2(-direction.y, direction.x).normalized;
+                currentVelocity += deviationDirection * deviationForce * timeStep;
+            }
+
+            // Отображаем траекторию
+            _lineRenderer.positionCount = trajectorySegments;
+            _lineRenderer.SetPositions(trajectoryPoints);
         }
     }
 }

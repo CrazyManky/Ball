@@ -9,9 +9,10 @@ namespace Project._Screepts.Screns
         [SerializeField] private SettingsScreen _settingsScreen;
         [SerializeField] private ShopScreen _shopScreen;
         [SerializeField] private RecordScreen _recordScreen;
+        [SerializeField] private GamePlayScreen _gameScreen;
 
-        //[SerializeField] private GameScreen _gameScreen;
-        //[SerializeField] private AudioManager _audioManager;
+        [SerializeField] private GameUI _gameUI;
+        [SerializeField] private AudioManager _audioManager;
         
         
         private BaseScreen _activeScreen;
@@ -21,27 +22,29 @@ namespace Project._Screepts.Screns
         {
             ServiceLocator.Init();
             ServiceLocator.Instance.AddService(this);
+            ServiceLocator.Instance.AddService(_gameUI);
+            ServiceLocator.Instance.AddService(_audioManager);
         }
 
         private void Start() => ShowMenuScreen();
 
         public void ShowMenuScreen()
         {
-            // _audioManager.PlayMenuMusick();
+            _audioManager.PlayMenu();
             ShowScreen(_menuScreen);
         }
 
         public void ShowRecordScreen() => ShowScreen(_recordScreen);
         public void ShowSettingsScreen() => ShowScreen(_settingsScreen);
         public void ShowShopScreen() => ShowScreen(_shopScreen);
-
-        //
-        // public void ShowGameScreen()
-        // {
-        //     _audioManager.PlayGame();
-        //     ShowScreen(_gameScreen);
-        // }
-        //
+        
+        public void ShowGameScreen()
+        {
+            _audioManager.PlayButtonClick();
+            _audioManager.PlayGame();
+            ShowScreen(_gameScreen);
+        }
+        
         private void ShowScreen(BaseScreen screen)
         {
             _activeScreen?.Сlose();

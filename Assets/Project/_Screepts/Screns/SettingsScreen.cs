@@ -10,21 +10,25 @@ namespace Project._Screepts.Screns
 
         public void DisableSound()
         {
+            AudioManager.PlayButtonClick();
             _audioManager.SetVolume(false);
         }
 
         public void ShopPrivacyPolicy()
         {
+            AudioManager.PlayButtonClick();
             Instantiate(_privacyPolicyScreen, transform);
         }
 
         public void EnableSound()
         {
+            AudioManager.PlayButtonClick();
             _audioManager.SetVolume(true);
         }
 
         public void BackToMenu()
         {
+            AudioManager.PlayButtonClick();
             Dialog.ShowMenuScreen();
         }
     }

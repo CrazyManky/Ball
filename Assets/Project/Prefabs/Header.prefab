@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Settings
+  m_text: Shop
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 11c8d28d22aaf0d40bcf215e402a3155, type: 2}
   m_sharedMaterial: {fileID: 2323272592376671791, guid: 11c8d28d22aaf0d40bcf215e402a3155, type: 2}
@@ -169,7 +169,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 45.769592, y: 41.331238}
+  m_AnchoredPosition: {x: 45.76953, y: 41.331238}
   m_SizeDelta: {x: 137.7877, y: 131.3615}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &5640064796968144772
@@ -253,7 +253,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1755159327784786959}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Project._Screepts.Screns.ShopScreen, Assembly-CSharp
+        m_MethodName: ShowMenuScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8246659960452081252
 GameObject:
   m_ObjectHideFlags: 0
