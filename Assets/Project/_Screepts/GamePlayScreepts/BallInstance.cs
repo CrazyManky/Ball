@@ -35,7 +35,7 @@ namespace Project._Screepts.GamePlayScreepts
             {
                 Instance();
             }
-            
+
             if (_ballControllerInstance != null)
             {
                 Vector3 viewportPos = Camera.main.WorldToViewportPoint(_ballControllerInstance.transform.position);
@@ -47,9 +47,18 @@ namespace Project._Screepts.GamePlayScreepts
             }
         }
 
+        public void Reset()
+        {
+            _instanceCounter = 0;
+            OnInstance?.Invoke(_instanceCounter);
+        }
 
         public void Close()
         {
+            if (_ballControllerInstance == null)
+            {
+                return;
+            }
             Destroy(_ballControllerInstance.gameObject);
         }
     }

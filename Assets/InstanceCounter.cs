@@ -7,6 +7,11 @@ public class InstanceCounter : MonoBehaviour
 
     public void Value(int value)
     {
-        _text.text = $"{value}/3";
+        _text.text = $"{value - 1}/3";
+    }
+
+    public void Reset()
+    {
+        _text.text = $"0/3";
     }
 }

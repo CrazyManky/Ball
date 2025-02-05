@@ -170,7 +170,7 @@ Transform:
   m_GameObject: {fileID: 1381572230516681064}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.46189806, w: 0.886933}
-  m_LocalPosition: {x: 381, y: -486, z: 2.42858}
+  m_LocalPosition: {x: -54, y: -427, z: 2.42858}
   m_LocalScale: {x: 70.416245, y: 67.94794, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -633,7 +633,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _acitvePlayerItem: {fileID: 11400000, guid: 054a8f0961286b746aec84b9235de479, type: 2}
   _playerPrefab: {fileID: 950831033797459326, guid: b4a3b34615bd0bc448ed8dc541f36e21, type: 3}
-  _maxInstance: 0
 --- !u!1 &3767952421023853985
 GameObject:
   m_ObjectHideFlags: 0
