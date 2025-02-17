@@ -1,7 +1,11 @@
+using UnityEngine;
+
 namespace Project._Screepts.Screns
 {
     public class MenuScreen : BaseScreen
     {
+        [SerializeField] private FactsScreen _factsScreen;
+
         public void ShowSettingsScreen()
         {
             Dialog.ShowSettingsScreen();
@@ -20,6 +24,11 @@ namespace Project._Screepts.Screns
         public void ShowRecordScreen()
         {
             Dialog.ShowRecordScreen();
+        }
+
+        public void ShowFactScreen()
+        {
+            Instantiate(_factsScreen, transform);
         }
     }
 }
